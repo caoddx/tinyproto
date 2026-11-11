@@ -44,6 +44,8 @@ extern "C"
 #include "cpp/cpp_hal.h"
 #elif defined(TINY_CUSTOM_PLATFORM)
 #include "no_platform/no_platform_hal.h"
+#elif defined(__ZEPHYR__)
+#include "zephyr/zephyr_hal.h"
 #elif defined(__AVR__)
 #include "avr/avr_hal.h"
 #elif defined(__XTENSA__)
@@ -68,7 +70,6 @@ extern "C"
 #include <stdint.h>
 #include <stdbool.h>
 
-
 #ifndef CONFIG_TINYHAL_THREAD_SUPPORT
 /**
  * By default disable thread support
@@ -76,36 +77,34 @@ extern "C"
 #define CONFIG_TINYHAL_THREAD_SUPPORT 0
 #endif
 
-
 #if defined(_MSC_VER)
 /// This macro is used internally for aligning the structures
-#define TINY_ALIGNED(x)   __declspec(align(x))
+#define TINY_ALIGNED(x) __declspec(align(x))
 #elif defined(__GNUC__)
 /// This macro is used internally for aligning the structures
-#define TINY_ALIGNED(x)   __attribute__ ((aligned (x)))
+#define TINY_ALIGNED(x) __attribute__((aligned(x)))
 #else
 /// This macro is used internally for aligning the structures
 #define TINY_ALIGNED(x)
 #endif
 
-
-#if defined(__TARGET_CPU_CORTEX_M0) || defined(__TARGET_CPU_CORTEX_M0_) || defined(__ARM_ARCH_6M__) || \
-    defined(__TARGET_CPU_CORTEX_M3) || defined(__TARGET_CPU_CORTEX_M4) || defined(__ARM_ARCH_7EM__) || \
+#if defined(__TARGET_CPU_CORTEX_M0) || defined(__TARGET_CPU_CORTEX_M0_) || defined(__ARM_ARCH_6M__) ||                 \
+    defined(__TARGET_CPU_CORTEX_M3) || defined(__TARGET_CPU_CORTEX_M4) || defined(__ARM_ARCH_7EM__) ||                 \
     defined(__ARM_ARCH_7M__)
 
 /// This macro is used internally for aligning the structures
-#define TINY_ALIGN_STRUCT_VALUE     (sizeof(uintptr_t))
+#define TINY_ALIGN_STRUCT_VALUE (sizeof(uintptr_t))
 
 #elif defined(_MSC_VER)
 
 // MS Compiler at least in MSVC 2019 doesn't support sizeof and braces in __declspec(align(x)).
 /// This macro is used internally for aligning the structures
-#define TINY_ALIGN_STRUCT_VALUE  8
+#define TINY_ALIGN_STRUCT_VALUE 8
 
 #else
 
 /// This macro is used internally for aligning the structures
-#define TINY_ALIGN_STRUCT_VALUE     (uintptr_t)(sizeof(uintptr_t))
+#define TINY_ALIGN_STRUCT_VALUE (uintptr_t)(sizeof(uintptr_t))
 
 #endif
 
@@ -113,7 +112,8 @@ extern "C"
 #define TINY_ALIGNED_STRUCT TINY_ALIGNED(TINY_ALIGN_STRUCT_VALUE)
 
 /// This macro is used internally for aligning the structures
-#define TINY_ALIGN_BUFFER(x) ((uint8_t *)( ((uintptr_t)x + TINY_ALIGN_STRUCT_VALUE - 1) & (~(TINY_ALIGN_STRUCT_VALUE - 1)) ))
+#define TINY_ALIGN_BUFFER(x)                                                                                           \
+    ((uint8_t *)(((uintptr_t)x + TINY_ALIGN_STRUCT_VALUE - 1) & (~(TINY_ALIGN_STRUCT_VALUE - 1))))
 
 /**
  * @ingroup ERROR_CODES
@@ -223,7 +223,8 @@ extern "C"
     typedef void (*on_frame_send_cb_t)(void *udata, uint8_t address, const uint8_t *pdata, int size);
 
     /**
-     * on_connect_event_cb_t is a callback function, which is called every time connection is established or interrupted.
+     * on_connect_event_cb_t is a callback function, which is called every time connection is established or
+     * interrupted.
      * @param udata user data
      * @param address remote client id (only for master device).
      * @param connected event occured.

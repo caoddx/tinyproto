@@ -1,0 +1,19 @@
+# tinyproto 的 Zephyr 构建：只编译 C 实现，不包含 C++ 封装
+if(CONFIG_TINYPROTO)
+  zephyr_library()
+  zephyr_library_sources(
+    ${CMAKE_CURRENT_LIST_DIR}/../src/hal/tiny_debug.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/hal/tiny_types.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/proto/crc/tiny_crc.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/proto/fd/tiny_fd.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/proto/fd/tiny_fd_frames_queue.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/proto/fd/tiny_fd_i_queue_control.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/proto/fd/tiny_fd_peers.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/proto/fd/tiny_fd_proto_logger.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/proto/fd/tiny_fd_service_queue.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/proto/fd/tiny_fd_tx.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/proto/hdlc/high_level/hdlc.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/proto/hdlc/low_level/hdlc.c
+  )
+  zephyr_include_directories(${CMAKE_CURRENT_LIST_DIR}/../src)
+endif()

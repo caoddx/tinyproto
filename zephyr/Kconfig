@@ -1,0 +1,5 @@
+# tinyproto 的 Zephyr 配置入口
+config TINYPROTO
+	bool "Tiny Protocol library"
+	help
+	  tinyproto 的 Zephyr 移植，提供 C 版全双工（fd）协议实现。

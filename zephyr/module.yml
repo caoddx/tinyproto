@@ -1,0 +1,4 @@
+name: tinyproto
+build:
+  cmake: zephyr
+  kconfig: zephyr/Kconfig
